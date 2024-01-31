@@ -1,0 +1,86 @@
+#form-file-upload {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 4%;
+  height: 32rem;
+  width: 44rem;
+  max-width: 100%;
+  text-align: center;
+  position: relative;
+  white-space: pre-wrap;
+  direction: ltr;
+}
+
+#input-file-upload {
+  display: none;
+}
+
+#label-file-upload {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-width: 2px;
+  border-radius: 1rem;
+  border-style: dashed;
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+#label-file-upload.drag-active {
+  background-color: #ffffff;
+}
+
+.upload-button {
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 1rem;
+  border: none;
+  font-family: 'Oswald', sans-serif;
+  background-color: transparent;
+}
+
+.upload-button:hover {
+  text-decoration-line: underline;
+}
+
+#drag-file-element {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+/* Style for the container of the form and response div */
+.article-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style for the response div */
+.response {
+  margin-top: 2%;
+  text-align: center;
+  padding: 15px;
+  border: 2px solid #333333bd;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.response.err {
+  border: 2px solid red;
+}
+
+#p_breeds {
+  font-size: 20px;
+}
+
+pre{
+  font-family: "Assistant", sans-serif;
+}

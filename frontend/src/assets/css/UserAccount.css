@@ -1,0 +1,71 @@
+
+
+ .userHeading {
+    width: 100%;
+    height: 80vh;
+    background-size: cover;
+      }
+      .userWrapper {  
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+         
+      }
+      .userText {
+       max-width: 650px;
+      position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+       text-align: center;
+      }
+ 
+      .userText h1 {
+       font-size: 30px;
+      }
+
+      .userText img {
+        height: 300px;
+        width: 400px;
+      }
+      .userText button {
+       padding: 10px 20px;
+       background-color: rgb(49, 114, 212);
+       color: white;
+       border: none;
+       font-weight: 550;
+       border-radius: 5%;
+      }
+.tableHead {
+    background-color: rgb(163, 163, 170); 
+}
+
+.tableWrapper{
+padding-left: 250px;
+padding-right: 250px;
+padding-bottom: 150px;
+padding-top: 60px;
+}
+
+.imgTable{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.headingOfUser img {
+    float: right;
+    margin: 0px 0px 15px 20px;
+}
+
+.headingOfUser p {
+    padding-right: 800px;
+    padding-top: 120px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.requestTableHead {
+    background-color: rgb(206, 206, 214);
+}
+

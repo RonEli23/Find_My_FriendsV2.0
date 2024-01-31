@@ -1,0 +1,47 @@
+add(update) file to stage:
+git add <file_name>
+
+add multi files to stage 
+git add <file_name> <file_name>
+
+add all files to stage:
+git add .
+
+check status of the stage:
+git status
+
+del file from stage:
+git rm --cached <file_name>
+
+del multi files from stage:
+git rm --cached <file_name> <file_name>
+
+commit file/s:
+git commit -m "<your message>"
+
+push repo to github:
+git push -u origin <branch_name>
+
+pull repo to my project from github:
+git pull origin <branch_name>
+
+create new branch:
+git branch <name_of_the_branch>
+
+view branch:
+git branch
+
+change branch:
+git checkout <name_of_the_branch>
+
+del branch:
+git branch <name_of_the_branch>
+
+merge branch:
+you need to make sure you are inside the branch you want to merge to him:
+git checkout <name_of_the_branch> (probably change to "main") 
+then:
+git merge <name_of_the_branch>
+example (two-stage):
+1. git checkout main
+2. git merge shai

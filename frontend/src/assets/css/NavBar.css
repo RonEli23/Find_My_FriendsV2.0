@@ -1,0 +1,15 @@
+/* .appBar {
+        direction: rtl;
+} */
+
+.dog {
+        height: 35px;
+        width: 35px;
+        border-radius: 50%;
+        border: 2px solid #333;
+        background-color: #fff;
+        color:blue;
+        cursor: pointer;
+        /* margin: auto;
+        display: block; */
+}

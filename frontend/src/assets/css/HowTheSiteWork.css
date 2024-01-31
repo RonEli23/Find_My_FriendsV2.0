@@ -1,0 +1,66 @@
+.processFinding {
+        text-align: center;
+}
+
+
+.processFinding img {
+        height: 130px;
+        width: 130px;
+}
+
+
+#bigDivProcessFinding {
+        display: flex;
+        justify-content: space-between;
+        padding: 30px;
+}
+
+.arrowStyle {
+        height: 30px;
+        width: 30px;
+        margin-top: 50px;
+
+}
+
+h1 {
+        text-align: center;
+}
+
+#buttonStart {
+        /* border thickness */
+        --b: 3px;
+        /* size of the corner */
+        --s: .40em;
+
+        --color: #373B44;
+
+        padding: calc(.5em + var(--s)) calc(.9em + var(--s));
+        color: var(--color);
+        --_p: var(--s);
+        background:
+                conic-gradient(from 90deg at var(--b) var(--b), #0000 90deg, var(--color) 0) var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+        transition: .3s linear, color 0s, background-color 0s;
+        outline: var(--b) solid #0000;
+        outline-offset: .6em;
+        font-size: 20px;
+
+        border: 0;
+
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+
+}
+
+#buttonStart:hover,
+#buttonStart:focus-visible {
+        --_p: 0px;
+        outline-color: var(--color);
+        outline-offset: .05em;
+        background-color: #FF8A00;
+}
+
+
+#startSearchDiv {
+        text-align: center;
+}

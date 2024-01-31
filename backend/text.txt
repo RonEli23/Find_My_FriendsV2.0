@@ -1,0 +1,2 @@
+in order to run flask move to path:
+cd backend/py

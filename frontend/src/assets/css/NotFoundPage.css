@@ -1,0 +1,12 @@
+.PageNotFound {
+        text-align: center;
+}
+
+.PageNotFound img {
+        height: 600px;
+        width: 600px;
+}
+
+.PageNotFound button:hover {
+        opacity: 0.8;
+}

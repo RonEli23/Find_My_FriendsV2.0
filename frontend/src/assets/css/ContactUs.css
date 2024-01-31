@@ -1,0 +1,79 @@
+.contactUs {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.baner {
+  width: 100%;
+  background-image: url(../images/contact_us.jpg);
+  height: 60vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.contactUs h1 {
+  text-align: center;
+  margin-top: 5vh;
+}
+
+.contactUs p {
+  text-align: center;
+  margin-top: 3vh;
+}
+
+.line {
+  width: 200px;
+  height: 3px;
+  background: #F3C577;
+  margin: 2vh auto;
+}
+
+.contact_wrapper {
+  margin-bottom: 5vh;
+  padding: 2vh 10%;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.form_contact {
+  height: auto;
+  width: 70%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  align-items: center;
+  grid-gap: 5vh;
+  margin-top: -5vh;
+}
+
+.form_contact form {
+  position: relative;
+  margin-right: 20px;
+  margin-left: 0;
+  margin-top: 0;
+}
+
+.form_contact form input,
+.form_contact form textarea,
+.form_contact select,
+.form_contact button {
+  width: 70%;
+  padding: 3vh;
+  font-size: 12px;
+  margin-bottom: 2vh;
+  font-family: Arial;
+}
+
+.dog_image img {
+  margin: 8vh -80px 0 -80px;
+  width: 500px;
+  height: 300;
+}
+
+.errorMsg {
+  border-color: red;
+}

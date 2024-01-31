@@ -1,0 +1,19 @@
+.btn-position {
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+}
+
+.btn-style {
+        height: 45px;
+        width: 45px;
+        border-radius: 50%;
+        border: 3px solid #333;
+        background-color: #fff;
+        color: #333;
+        cursor: pointer;
+}
+
+.btn-style:hover {
+        opacity: 0.7;
+}

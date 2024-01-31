@@ -1,0 +1,48 @@
+.copyright {
+       direction: ltr;
+       margin-right: 30%;
+       color: #ffffff;
+       font-size: smaller;
+}
+
+.footer_img {
+       padding: 30px;
+       width: 130px;
+}
+
+.figure_style:hover {
+       opacity: 0.3;
+}
+
+#text {
+       text-align: justify;
+}
+
+figcaption {
+       color: white;
+       text-align: center;
+       direction: rtl;
+       margin: -20px;
+}
+
+a {
+       text-decoration: none;
+}
+
+
+.position-ContactUs {
+       margin-right: -60%;
+}
+
+.position-social_media {
+       margin-right: 50%;
+}
+
+.position-email {
+       margin-right: 50%;
+}
+
+
+#div_position {
+       display: flex;
+}
