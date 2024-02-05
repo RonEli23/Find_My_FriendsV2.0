@@ -3,7 +3,7 @@ import db_user_details from "../sql/sqlConnection.js";
 import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 import { pet_details_schema } from "../models/pet_details.js";
-import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const newPet_model = mongoose.model("newPet", pet_details_schema);
 
@@ -26,83 +26,6 @@ contactEmail.verify((error) => {
         }
 });
 
-// SignUp
-export const handleSignUp = async (req, res) => {
-
-        const { email, first_name, last_name, phone_number, user_password } = req.body;
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-                // Validation errors
-                return res.status(400).json({ errors: errors.array() });
-        }
-
-        try {
-                db_user_details.query('SELECT COUNT(*) AS count FROM users WHERE email = ?', [email], async (err, result) => {
-                        if (err) {
-                                res.send(err.message);
-                                console.log(err.message);
-                        }
-
-                        if (result[0].count > 0) {
-                                res.send({ message: "User already exists" });
-                        }
-
-                        else {
-                                // Hash the user's password
-                                const hash = await bcrypt.hash(user_password, 10);
-                                db_user_details.query('INSERT INTO users (email, first_name, last_name, phone_number, user_password) VALUES (?,?,?,?,?)', [email, first_name, last_name, phone_number, hash], (err, result) => {
-                                        if (err) {
-                                                res.send(err.message);
-                                                console.log(err.message);
-                                        }
-                                        res.send(result);
-                                });
-                        }
-                });
-        }
-        catch (err) {
-                res.send(err.message);
-                console.log(err.message);
-        }
-};
-
-// SignIn
-export const handleSignIn = async (req, res) => {
-        const { email, user_password } = req.body;
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-                // Validation errors
-                return res.status(400).json({ errors: errors.array() });
-        }
-
-        try {
-                // db_user_details.query('SELECT * FROM users WHERE email = ? AND user_password = ?', [email, user_password], (err, result) => {
-                db_user_details.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
-                        if (err) {
-                                res.send(err.message);
-                                console.log(err.message);
-                        }
-
-                        if (result.length > 0) {
-                                const isMatch = await bcrypt.compare(user_password, result[0].user_password);
-                                if (isMatch) {
-                                        res.send(result[0]);
-                                }
-                                else {
-                                        res.send({ message: "Password is not the same" });
-                                }
-                        } else {
-                                res.send({ message: "User not found" });
-                        }
-                });
-        }
-        catch (err) {
-                res.send(err.message);
-                console.log(err.message);
-        }
-};
 
 // Delete all users
 export const handleDeleteAllUser = async (req, res) => {

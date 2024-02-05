@@ -52,7 +52,7 @@ db_user_details.connect((err) => {
 
                                 // Create user_table if it doesn't exist
                                 else {
-                                        const user_table = 'CREATE TABLE users (email VARCHAR(40) PRIMARY KEY, first_name VARCHAR(20) NOT NULL, last_name VARCHAR(20) NOT NULL, phone_number VARCHAR(10), user_password VARCHAR(255) NOT NULL)';
+                                        const user_table = 'CREATE TABLE users (email VARCHAR(40) PRIMARY KEY, first_name VARCHAR(20) NOT NULL, last_name VARCHAR(20) NOT NULL, phone_number VARCHAR(10), user_password VARCHAR(255) NOT NULL, refresh_token VARCHAR(200))';
                                         db_user_details.query(user_table, (err) => {
                                                 if (err) throw err;
                                                 console.log("Table created");
