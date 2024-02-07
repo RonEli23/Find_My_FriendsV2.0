@@ -21,12 +21,13 @@ export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
     const [user, setUser] = useState(getInitialState);
+    const [persist, setPersist] = useState(JSON.parse(localStorage.getItem("persist")) || false);
 
     useEffect(() => {
         Cookies.set("user", JSON.stringify(user));
     }, [user]);
 
-    const login = (first_name, last_name, email, phone_number) => {
+    const login = (first_name, last_name, email, phone_number, accessToken) => {
         const updatedUser = {
             ...user,
             first_name,
@@ -34,6 +35,7 @@ const AuthContextProvider = (props) => {
             email,
             phone_number,
             isLoggedIn: true,
+            accessToken
             //first_time_Logged_in: false,
         };
         setUser(updatedUser);

@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { handleDeleteAllUser, handleGetAllUsers, handleUserInfo, handleDeleteUser } from '../controllers/user.controller.js';
+import { handleDeleteAllUser, handleGetAllUsers, handleUserInfo, handleDeleteUser } from '../../controllers/user.controller.js';
 
 router.route('/')
     .get(handleGetAllUsers)

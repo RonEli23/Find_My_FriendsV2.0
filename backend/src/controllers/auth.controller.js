@@ -79,7 +79,7 @@ export const handleSignIn = async (req, res) => {
                     // Check if the update was successful
                     if (result.affectedRows > 0) {
                         res.cookie("jwt", refreshToken, { httpOnly: true });
-                        res.json({ accessToken });
+                        res.json({ ...user, accessToken });
                     } else {
                         res.status(404).send("User not found"); // Adjust the status code and message accordingly
                     }
