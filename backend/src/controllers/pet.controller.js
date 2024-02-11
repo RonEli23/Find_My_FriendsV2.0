@@ -160,7 +160,8 @@ export const handlePetDetails = async (req, res) => {
   }
 };
 
-export const handleMostFoundPets = async (req, res) => {
+export const handleFinderOfTheMonth = async (req, res) => {
+  console.log("handleFinderOfTheMonth")
   try {
     const filter = [
       {

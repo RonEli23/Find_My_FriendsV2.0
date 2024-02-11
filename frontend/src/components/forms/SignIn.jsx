@@ -1,7 +1,7 @@
 // import from react
 import { useState, useContext } from 'react';
 // import react-router-dom
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation  } from 'react-router-dom';
 // import libraries from material-ui
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -47,7 +47,11 @@ const SignIn = () => {
 
         const [formData, setFormData] = useState(initialFormData);
         const [showPassword, setShowPassword] = useState(false);
+
         const navigate = useNavigate();
+        const location = useLocation();
+        const from = location.state?.from?.pathname || "/";
+
         const { login } = useContext(AuthContext);
         const [emailError, setEmailError] = useState(false);
         const [passwordError, setPasswordError] = useState(false);
@@ -141,7 +145,8 @@ const SignIn = () => {
                                 const accessToken = res.data?.accessToken;
                                 setFormData(res.data);
                                 login(res.data?.first_name, res.data?.last_name, res.data?.email, res.data?.phone_number, accessToken);
-                                return navigate("/RequestStatus");
+                                //return navigate("/RequestStatus");
+                                navigate(from, { replace: true });
                         }
                 } catch (err) {
                         handleErrors(err);

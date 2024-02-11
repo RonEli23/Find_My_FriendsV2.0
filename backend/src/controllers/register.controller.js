@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import db_user_details from "../sql/sqlConnection.js";
+import { validationResult } from "express-validator";
 
 
 // SignUp

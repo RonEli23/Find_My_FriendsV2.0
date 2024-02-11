@@ -1,3 +1,4 @@
+import { useNavigate, useLocation } from "react-router-dom";
 // import libraries from react
 import { useState, useRef } from "react";
 // import libraries from material-ui
@@ -8,8 +9,9 @@ import PetDetails from "./PetDetails";
 // import css
 import "../../assets/css/ImageForm.css";
 // import axios 
-import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+import useAxiosPrivate from "../../hooks/useAxiosPrivate.js";
+const UPLOAD_IMAGE_URL = '/requests/uploadImage';
+
 
 // drag drop file component
 const ImageForm = () => {
@@ -20,6 +22,8 @@ const ImageForm = () => {
         const [dragText, setDragText] = useState("אפשר לגרור את התמונה לפה\n\n או");
         const [uploadText, setUploadText] = useState("להעלות קובץ בלחיצה");
         const [tipText, setTipText] = useState("טיפ קטן: לתוצאות מיטביות על התמונה להיות ברורה ככל הניתן ולהכיל את כל גוף החיה ")
+        const navigate = useNavigate();
+        const location = useLocation();
 
         // ref
         const inputRef = useRef(null);
@@ -29,6 +33,8 @@ const ImageForm = () => {
         const [pet_breeds, setPetBreeds] = useState("");
 
         const [errMassage, setErrMassage] = useState("");
+
+        const axiosPrivate = useAxiosPrivate();
 
         // handle drag events
         const handleDrag = (e) => {
@@ -61,6 +67,7 @@ const ImageForm = () => {
         // triggers when file is selected with click
         const handleChange = (e) => {
                 e.preventDefault();
+                console.log(e.target.files[0])
                 if (e.target.files && e.target.files[0]) {
                         const img = {
                                 preview: URL.createObjectURL(e.target.files[0]),
@@ -81,11 +88,19 @@ const ImageForm = () => {
         const handleSubmit = async (e) => {
                 e.preventDefault();
                 let formData = new FormData();
-                formData.append('file', image.data);
-
+                console.log(image.data);
+                if (image.data) {
+                        formData.append('file', image.data);
+                }
                 try {
                         setLoading(true);
-                        const res = await axios.post('/uploadImage', formData);
+                        for (var key of formData.entries()) {
+                                console.log(key[0] + ', ' + key[1])
+                        }
+                        
+                        const res = await axiosPrivate.post(UPLOAD_IMAGE_URL, formData,{
+                                headers:{"Content-Type": "multipart/form-data"}
+                        });
                         window.scrollBy(0, 10);
                         if (res.data?.error === "No file was uploaded.") {
                                 setLoading(false);
@@ -108,7 +123,8 @@ const ImageForm = () => {
                 } catch (err) {
                         setLoading(false);
                         setErrMassage(err.message);
-                        console.log(err);
+                        console.error(err);
+                        navigate('/SignIn', { state: { from: location }, replace: true });
                 }
         };
 

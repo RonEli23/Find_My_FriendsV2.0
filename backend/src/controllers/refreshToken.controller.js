@@ -13,7 +13,7 @@ const generateAccessToken = (user) => {
 
   // JWT options: expiresIn specifies the token's expiration time (e.g., 1 hour)
   const options = {
-    expiresIn: "10m",
+    expiresIn: "10s",
   };
 
   // Generate and return the JWT

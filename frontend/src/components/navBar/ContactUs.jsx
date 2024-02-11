@@ -7,8 +7,8 @@ import dog_computer from '../../assets/images/dog_computer.jpg';
 // import css
 import '../../assets/css/ContactUs.css';
 // import axios
-import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+import axios from '../../api/axios';
+const CONTECT_US_URL = '/publicRequests/contactUs';
 
 const ContactForm = () => {
   const initialFormData = {
@@ -51,7 +51,7 @@ const ContactForm = () => {
     };
 
     try {
-      const response = await axios.post("/contact", details, {
+      const response = await axios.post(CONTECT_US_URL, details, {
         headers: {
           "Content-Type": "application/json;charset=utf-8",
         },

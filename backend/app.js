@@ -8,9 +8,11 @@ import registerRouter from "./src/routes/register.js";
 import authRouter from "./src/routes/auth.js";
 import refreshRouter from "./src/routes/refresh.js";
 import logoutRouter from "./src/routes/logout.js";
-import dataRouter from "./src/routes/api/internalData.js";
+import dataRouter from "./src/routes/internalData.js";
+import publicRequestsRouter from "./src/routes/api/publicRequests.js";
 import requestsRouter from "./src/routes/api/requests.js";
 import usersRouter from "./src/routes/api/users.js";
+import internalDataRouter from "./src/routes/internalData.js";
 import { verifyJWT } from './src/middlewares/verifyJWT.middleware.js'
 
 const port = process.env.PORT || 8080;
@@ -28,6 +30,8 @@ app.use('/register', registerRouter); // change from userSignUp at front
 app.use('/auth', authRouter); // change from userSignIn at front
 app.use('/refresh', refreshRouter);
 app.use('/logout', logoutRouter);
+app.use("/internalData", internalDataRouter);
+app.use('/publicRequests', publicRequestsRouter);
 
 app.use(verifyJWT);
 app.use('/requests', requestsRouter);

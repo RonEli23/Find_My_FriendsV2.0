@@ -1,7 +1,7 @@
 // import libraries from react
 import { useState, useContext, useEffect } from "react";
 // import react-router-dom
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 // import libraries from material-ui
 import Alert from '@mui/material/Alert';
 import Avatar from "@mui/material/Avatar";
@@ -22,8 +22,8 @@ import Loader from "../Loader";
 import { AuthContext } from "../../context/AuthContext";
 import { UserRequestContext } from "../../context/UserRequestContext";
 // import axios 
-import axios from "axios";
-axios.defaults.baseURL = "http://127.0.0.1:8080/route";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate.js";
+const PET_DETAILS_URL = '/requests/petDetails';
 
 const PetDetails = (props) => {
   const theme = createTheme();
@@ -52,6 +52,9 @@ const PetDetails = (props) => {
   const [locationError, setLocationError] = useState(false);
   const [textErr, setText] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const axiosPrivate = useAxiosPrivate();
+ 
 
   useEffect(() => {
     if (!user.isLoggedIn) {
@@ -74,7 +77,7 @@ const PetDetails = (props) => {
     try {
       setLoading(true);
       // Send POST request
-      const res = await axios.post("/petDetails", formData);
+      const res = await axiosPrivate.post(PET_DETAILS_URL, formData);
 
       // HTTP req successful
   
@@ -97,11 +100,11 @@ const PetDetails = (props) => {
     } catch (err) {
       setLoading(false);
       handleErrors(err);
+      navigate('/SignIn', { state: { from: location }, replace: true });
     }
   };
 
   const handleErrors = (err) => {
-    console.log("hi2")
     setFlag(true)
     if (err.response?.data && err.response?.data.errors) {
       // Handle validation errors

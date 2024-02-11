@@ -12,7 +12,7 @@ export const verifyJWT = (req, res, next) => {
         accessSecretKey,
         (err, decoded) => {
             if (err) return res.sendStatus(403); //invalid token
-            req.user = decoded.username; //notice - maby will cause some problems
+            //req.user = decoded.username; //notice - maby will cause some problems
             next();
         }
     );

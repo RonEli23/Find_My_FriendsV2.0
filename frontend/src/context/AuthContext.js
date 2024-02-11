@@ -2,6 +2,7 @@
 import { createContext, useState, useEffect } from "react";
 // import js-cookie
 import Cookies from 'js-cookie';
+import axios from "../api/axios.js";
 
 const initUesr = {
     first_name: "",
@@ -21,7 +22,7 @@ export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
     const [user, setUser] = useState(getInitialState);
-    const [persist, setPersist] = useState(JSON.parse(localStorage.getItem("persist")) || false);
+    //const [persist, setPersist] = useState(JSON.parse(localStorage.getItem("persist")) || false);
 
     useEffect(() => {
         Cookies.set("user", JSON.stringify(user));
@@ -42,9 +43,16 @@ const AuthContextProvider = (props) => {
         Cookies.set("user", JSON.stringify(user));
     }
 
-    const logout = () => {
+    const logout = async () => {
         setUser({})
         Cookies.set("user", JSON.stringify(user));
+        try {
+            await axios.get('/logout', {
+                withCredentials: true
+            });
+        } catch (err) {
+            console.error(err);
+        }
 
     }
 
