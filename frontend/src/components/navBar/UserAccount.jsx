@@ -1,7 +1,7 @@
 // import libraries from react
 import { useState, useEffect, useContext } from 'react';
 // import react-router-dom
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 // import libraries from material-ui
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
@@ -26,8 +26,8 @@ import dog_with_cat from '../../assets/images/dog_with_cat.jpg';
 // import css
 import '../../assets/css/UserAccount.css';
 // import axios
-import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+import useAxiosPrivate from "../../hooks/useAxiosPrivate.js";
+const USER_INFO_URL = '/users/userInfo';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -51,6 +51,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const UserAccount = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, logout } = useContext(AuthContext);
   const [requests, setRequests] = useState([]);
   // const [formErrors, setFormErrors] = useState([]);
@@ -59,10 +60,11 @@ const UserAccount = () => {
   const [loading, setLoading] = useState(false);
   const [flag, setFlag] = useState(false);
   const [textErr, setText] = useState("");
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     setLoading(true);
-    axios.get('/userInfo', {
+    axiosPrivate.get(USER_INFO_URL, {
       params: {
         email: user.email
       }
@@ -75,6 +77,7 @@ const UserAccount = () => {
       .catch(error => {
         console.error(error);
         setLoading(false);
+        navigate('/SignIn', { state: { from: location }, replace: true });
       });
   }, []);
 
@@ -88,7 +91,7 @@ const UserAccount = () => {
     const confirmed = window.confirm(`היי ${user.first_name} ${user.last_name} האם אתה/את בטוחים שברצונכם למחוק את המשתמש? פעולה זו היא סופית ולא ניתנת לשחזור! `);
     if (confirmed) {
       try {
-        const response = await axios.post('/deleteUser', { email: user.email });
+        const response = await axiosPrivate.delete(`users/${user.email}`);
         if (response.status === 200) {
           setOpen(true);
           setTimeout(() => {

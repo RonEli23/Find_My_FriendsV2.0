@@ -1,7 +1,7 @@
 // import from react
 import { useState, useContext } from 'react';
 // import react-router-dom
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation  } from 'react-router-dom';
 // import libraries from material-ui
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -25,24 +25,33 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 // import our components
 import { AuthContext } from '../../context/AuthContext';
+//import useAuth from '../../hooks/useAute.js';
+
 // import axios
-import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+// import axios from 'axios';
+// axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+
+import axios from '../../api/axios';
+const LOGIN_URL = '/auth';
+
 
 const theme = createTheme();
 
 const SignIn = () => {
         const initialFormData = {
                 email: "",
-                user_password: "",
-                phone_number: "",
-                first_name: "",
-                last_name: "",
+                user_password: ""
         };
+
+        //const { setAuth, persist, setPersist } = useAuth();
 
         const [formData, setFormData] = useState(initialFormData);
         const [showPassword, setShowPassword] = useState(false);
+
         const navigate = useNavigate();
+        const location = useLocation();
+        const from = location.state?.from?.pathname || "/";
+
         const { login } = useContext(AuthContext);
         const [emailError, setEmailError] = useState(false);
         const [passwordError, setPasswordError] = useState(false);
@@ -112,7 +121,16 @@ const SignIn = () => {
                         return;
                 }
                 try {
-                        const res = await axios.post('/userSignIn', formData);
+                        const res = await axios.post(LOGIN_URL,
+                                JSON.stringify(formData),
+                                {
+                                        headers: { 'Content-Type': 'application/json' },
+                                        withCredentials: true
+                                }
+                        );
+
+                        console.log(JSON.stringify(res?.data));
+
                         if (res.data?.message === "User not found") {
                                 setFlag(true);
                                 setEmailError(true);
@@ -124,9 +142,11 @@ const SignIn = () => {
                                 setText("אוי! נראה שהסיסמה שהוזנה לא תואמת למה ששמור במערכת");
                         }
                         else {
+                                const accessToken = res.data?.accessToken;
                                 setFormData(res.data);
-                                login(res.data?.first_name, res.data?.last_name, res.data?.email, res.data?.phone_number);
-                                return navigate("/RequestStatus");
+                                login(res.data?.first_name, res.data?.last_name, res.data?.email, res.data?.phone_number, accessToken);
+                                //return navigate("/RequestStatus");
+                                navigate(from, { replace: true });
                         }
                 } catch (err) {
                         handleErrors(err);

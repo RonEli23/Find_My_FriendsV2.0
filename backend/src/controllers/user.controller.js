@@ -39,7 +39,10 @@ export const handleDeleteAllUser = async (req, res) => {
 
 // Delete user
 export const handleDeleteUser = async (req, res) => {
-        const { email } = req.body;
+        console.log(req.params);
+        const email  = req.params.email;
+        console.log("email is" + email);
+        if(!email) {res.status(400);}
         db_user_details.query("DELETE FROM users WHERE email = ?", [email], async (err) => {
                 if (err) {
                         console.log(err.message);
@@ -106,6 +109,7 @@ export const handleUserInfo = async (req, res) => {
 }
 
 export const handleContactUs = (req, res) => {
+        console.log("hi")
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
                 // Validation errors

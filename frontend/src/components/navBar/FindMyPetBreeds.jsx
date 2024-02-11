@@ -7,8 +7,8 @@ import Loader from '../Loader';
 // import css
 import "../../assets/css/FindMyPetBreeds.css";
 // import axios 
-import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+import axios from '../../api/axios';
+const UPLOAD_IMAGE_URL = '/publicRequests/uploadImage';
 
 // drag drop file component
 const FindMyPetBreeds = () => {
@@ -80,7 +80,9 @@ const FindMyPetBreeds = () => {
 
                 try {
                         setLoading(true);
-                        const res = await axios.post('/uploadImage', formData);
+                        const res = await axios.post(UPLOAD_IMAGE_URL, formData,{
+                                headers:{"Content-Type": "multipart/form-data"}
+                        });
                         window.scrollBy(0, 100);
                         if (res.data.error === "No file was uploaded.") {
                                 setErrMassage(`אופס! נראה ששכחת להעלות תמונה`);

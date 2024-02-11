@@ -5,8 +5,8 @@ import Avatar from "@mui/material/Avatar";
 // import css
 import '../../assets/css/FinderOfTheMonth.css';
 // import axios
-import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+import axios from '../../api/axios';
+const FINDER_OF_THE_MONTH_URL = '/internalData/finderOfTheMonth';
 
 const FinderOfTheMonth = () => {
         const [userWithMostFoundPets, setUserWithMostFoundPets] = useState(null);
@@ -14,7 +14,7 @@ const FinderOfTheMonth = () => {
 
         const fetchData = async () => {
                 try {
-                        const response = await axios.get("/MostFoundPets");
+                        const response = await axios.get(FINDER_OF_THE_MONTH_URL);
                         setUserWithMostFoundPets(response.data);
                 } catch (err) {
                         setErrMassage(err.message);

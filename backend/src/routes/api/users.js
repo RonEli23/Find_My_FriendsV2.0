@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { handleDeleteAllUser, handleGetAllUsers, handleUserInfo, handleDeleteUser } from '../controllers/user.controller.js';
+import { handleDeleteAllUser, handleGetAllUsers, handleUserInfo, handleDeleteUser } from '../../controllers/user.controller.js';
 
 router.route('/')
     .get(handleGetAllUsers)
@@ -8,12 +8,11 @@ router.route('/')
     //.put(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), employeesController.updateEmployee)
     .delete(/*verifyRoles(ROLES_LIST.Admin), */handleDeleteAllUser);
 
-router.route('/:id')
-    //.get(employeesController.getEmployee)
-    .delete(handleDeleteUser);
+router.route('/:email')
+    .delete(handleDeleteUser)
+    .get(handleUserInfo)
 
-router.route('/userInfo')
-    .get(handleUserInfo)  
+
 
 
 export default router;

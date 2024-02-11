@@ -24,8 +24,8 @@ import Alert from '@mui/material/Alert';
 // import our components
 import { AuthContext } from '../../context/AuthContext';
 // import axios
-import axios from 'axios';
-axios.defaults.baseURL = 'http://127.0.0.1:8080/route';
+import axios from '../../api/axios.js';
+const REGISTER_URL = '/register';
 
 const theme = createTheme();
 
@@ -148,7 +148,7 @@ const SignUp = () => {
     }
 
     try {
-      const res = await axios.post("/userSignUp", formData);
+      const res = await axios.post(REGISTER_URL, formData);
       if (res.data?.message === "User already exists") {
         setFlag(true);
         return setText("אוי! נראה שהמשתמש כבר קיים במערכת");
