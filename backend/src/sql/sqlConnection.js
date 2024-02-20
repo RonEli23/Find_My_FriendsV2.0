@@ -18,19 +18,20 @@ db_user_details.connect((err) => {
                 if (err) throw err;
 
                 // Extract the database names from the result
-                const databases = result.map(result => result.Database);
+                const database = result.map(result => result.Database);
 
-                // Check if the user exists
-                if (databases.includes(database_name)) {
+                 // Check if DB exists
+                 if (database.includes(database_name)) {
                         console.log("Database already exists");
                 }
+    
 
                 // Create users_details database if it doesn't exist
                 else {
                         const user_details_database = 'CREATE DATABASE IF NOT EXISTS users_details';
                         db_user_details.query(user_details_database, (err) => {
                                 if (err) throw err;
-                                console.log("Database created");
+                                console.log("user_details database created");
                         });
                 }
 
@@ -46,16 +47,22 @@ db_user_details.connect((err) => {
                                 const tables = result.map(row => Object.values(row)[0]);
 
                                 // Check if the user exists
-                                if (tables.includes('users')) {
-                                        console.log("Table already exists");
+                                if (tables.includes('users') && tables.includes('users_refresh_tokens')) {
+                                        console.log("Tables already exist");
                                 }
 
                                 // Create user_table if it doesn't exist
                                 else {
-                                        const user_table = 'CREATE TABLE users (email VARCHAR(40) PRIMARY KEY, first_name VARCHAR(20) NOT NULL, last_name VARCHAR(20) NOT NULL, phone_number VARCHAR(10), user_password VARCHAR(255) NOT NULL, refresh_token VARCHAR(200))';
+                                        const user_table = 'CREATE TABLE users (email VARCHAR(40) PRIMARY KEY, first_name VARCHAR(20) NOT NULL, last_name VARCHAR(20) NOT NULL, phone_number VARCHAR(10), user_password VARCHAR(255) NOT NULL)';
                                         db_user_details.query(user_table, (err) => {
                                                 if (err) throw err;
-                                                console.log("Table created");
+                                                console.log("users Table created");
+                                        });
+
+                                        const users_refresh_tokens = 'CREATE TABLE users_refresh_tokens (token_id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255),refresh_token VARCHAR(255) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE)';
+                                        db_user_details.query(users_refresh_tokens, (err) => {
+                                                if (err) throw err;
+                                                console.log("users_refresh_tokens table created");
                                         });
                                 }
                         });

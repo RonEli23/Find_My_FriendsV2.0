@@ -71,13 +71,13 @@ export const handleSignIn = async (req, res) => {
             const accessToken = generateAccessToken(user);
             const refreshToken = generateRefreshToken(user);
 
-            db_user_details.query("UPDATE users SET refresh_token = ? WHERE email = ?", [refreshToken, email], (err, result) => {
+            db_user_details.query("INSERT INTO users_refresh_tokens (email, refresh_token) VALUES (?, ?)", [email, refreshToken], (err, insertResult) => {
                 if (err) {
                     console.error("Error updating refresh token:", err);
                     res.status(500).send("Internal Server Error");
                 } else {
                     // Check if the update was successful
-                    if (result.affectedRows > 0) {
+                    if (insertResult.affectedRows > 0) {
                         res.cookie("jwt", refreshToken, { 
                           httpOnly: true,
                           sameSite: 'None',
