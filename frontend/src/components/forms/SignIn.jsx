@@ -129,28 +129,27 @@ const SignIn = () => {
                                 }
                         );
 
-                        console.log(JSON.stringify(res?.data));
+                        console.log(JSON.stringify(res));
 
-                        if (res.data?.message === "User not found") {
+                        
+                        const accessToken = res.data?.accessToken;
+                        setFormData(res.data);
+                        login(res.data?.first_name, res.data?.last_name, res.data?.email, res.data?.phone_number, accessToken);
+                        //return navigate("/RequestStatus");
+                        navigate(from, { replace: true });
+                        
+                } catch (err) {
+                        handleErrors(err);  
+                        if (err.response.data.message === "User not found") {
                                 setFlag(true);
                                 setEmailError(true);
                                 setText("אוי! נראה שהמשתמש לא קיים במערכת");
                         }
-                        else if (res.data?.message === "Password is not the same") {
+                        else if (err.response.data.message === "Password is not the same") {
                                 setFlag(true);
                                 setPasswordError(true);
                                 setText("אוי! נראה שהסיסמה שהוזנה לא תואמת למה ששמור במערכת");
-                        }
-                        else {
-                                const accessToken = res.data?.accessToken;
-                                setFormData(res.data);
-                                login(res.data?.first_name, res.data?.last_name, res.data?.email, res.data?.phone_number, accessToken);
-                                //return navigate("/RequestStatus");
-                                navigate(from, { replace: true });
-                        }
-                } catch (err) {
-                        handleErrors(err);
-                        console.log(err.message);
+                        }                        
                 }
         };
 

@@ -44,14 +44,15 @@ const AuthContextProvider = (props) => {
     }
 
     const logout = async () => {
-        setUser({})
         Cookies.set("user", JSON.stringify(user));
         try {
             await axios.get('/logout', {
                 withCredentials: true
             });
+            setUser({})
         } catch (err) {
             console.error(err);
+            window.alert("אוי! נראה שהייתה שגיאה בהתנתקות")
         }
 
     }

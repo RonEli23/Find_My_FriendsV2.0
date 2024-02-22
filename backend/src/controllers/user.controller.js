@@ -77,23 +77,24 @@ export const handleGetAllUsers = async (req, res) => {
 }
 
 export const handleContactUser = async (req, res) => {
-        const { email } = req.body;
+        const { email } = req.query;
+        
         try {
-                db_user_details.query('SELECT email, first_name, last_name, phone_number FROM users WHERE email = ?', [email], (err, result) => {
-                        if (err) {
-                                console.log("err: " + err.message);
-                                res.send(err.message);
-                        }
-                        else if (result[0] == undefined) {
-                                res.send("user not found");
-                        }
-                        res.send(result[0]);
-                });
+          const pool = await db_user_details;
+      
+          const [result] = await pool.query('SELECT email, first_name, last_name, phone_number FROM users WHERE email = ?', [email]);
+      
+          if (result.length === 0) {
+            return res.status(404).send("User not found");
+          }
+      
+          const user = result[0];
+          return res.send(user);
+        } catch (err) {
+          console.error("Error in handleContactUser:", err);
+          return res.status(500).send("Internal Server Error");
         }
-        catch (err) {
-                console.log(err.message);
-        }
-}
+};
 
 export const handleUserInfo = async (req, res) => {
         const email = req.query.email;

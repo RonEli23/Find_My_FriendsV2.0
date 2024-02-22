@@ -27,6 +27,7 @@ const useAxiosPrivate = () => {
             // else, deal with error response
             async (error) => {
                 const prevRequest = error?.config; // if there was an error, retrieve the previous request by accessing the config property
+                
                 if (error?.response?.status === 403 && !prevRequest?.sent) {
                     // 403 => expired  access token
                     // sent is a custom property, to avoid endless loop
