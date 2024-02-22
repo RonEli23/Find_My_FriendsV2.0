@@ -15,8 +15,8 @@ import { AuthContext } from '../../context/AuthContext';
 // import css
 import "../../assets/css/Similarity.css";
 // import axios 
-import axios from "axios";
-axios.defaults.baseURL = "http://127.0.0.1:8080/route";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate.js";
+const CONTACT_URL = '/requests/contactParents';
 
 const Transition = forwardRef((props, ref) => {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -34,6 +34,8 @@ const SimillarityResults = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const { user } = useContext(AuthContext);
+  const axiosPrivate = useAxiosPrivate();
+
 
   useEffect(() => {
     sliders.length > 1 &&
@@ -60,7 +62,12 @@ const SimillarityResults = () => {
   const handleClick = async () => {
     setOpen(true);
     try {
-      const res = await axios.post('/conactParents', { email: sliders[currentIndex].userEmail });
+      const res = await axiosPrivate.get(CONTACT_URL, {
+        params: {
+          email: sliders[currentIndex].userEmail
+        }
+      });
+      
       console.log(res.data);
       if (res.data === "user not found") {
         setFail(true);

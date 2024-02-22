@@ -43,6 +43,7 @@ const uploadFile = multer({
 }).single("file");
 
 export const handlePetImage = async (req, res) => {
+  console.log("Upload");
   fsExtra.emptyDirSync("pets");
   try {
     uploadFile(req, res, async (err) => {
@@ -161,7 +162,6 @@ export const handlePetDetails = async (req, res) => {
 };
 
 export const handleFinderOfTheMonth = async (req, res) => {
-  console.log("handleFinderOfTheMonth")
   try {
     const filter = [
       {

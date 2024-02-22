@@ -1,66 +1,65 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 
-const db_user_details = mysql.createConnection({
-        host: process.env.HOST,
-        user: process.env.USER,
-        password: process.env.PASSWORD,
-});
+const db_config = {
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
+};
 
-const database_name = process.env.DATABASE;
+async function initializeDatabase() {
+  try {
+    // Create a connection to MySQL server
+    const connection = await mysql.createConnection({
+      host: db_config.host,
+      user: db_config.user,
+      password: db_config.password,
+    });
 
-// Connect to MySQL server
-db_user_details.connect((err) => {
-        if (err) throw err;
-        console.log("Connected to MySQL database");
+    // Create 'users_details' database if it doesn't exist
+    await connection.query('CREATE DATABASE IF NOT EXISTS users_details');
+    console.log("Database 'users_details' created or already exists");
 
-        // Query to get list of all the databases of the user
-        db_user_details.query('SHOW DATABASES', (err, result) => {
-                if (err) throw err;
+    // Close the connection to create a new connection with the selected database
+    await connection.end();
 
-                // Extract the database names from the result
-                const databases = result.map(result => result.Database);
+    // Create a new connection with the 'users_details' database
+    const pool = mysql.createPool({
+      ...db_config,
+      database: 'users_details',
+    });
 
-                // Check if the user exists
-                if (databases.includes(database_name)) {
-                        console.log("Database already exists");
-                }
+    // Use the pool to create tables
+    const tables = [
+      `CREATE TABLE IF NOT EXISTS users (
+        email VARCHAR(40) PRIMARY KEY,
+        first_name VARCHAR(20) NOT NULL,
+        last_name VARCHAR(20) NOT NULL,
+        phone_number VARCHAR(10),
+        user_password VARCHAR(255) NOT NULL
+      )`,
+      `CREATE TABLE IF NOT EXISTS users_refresh_tokens (
+        token_id INT AUTO_INCREMENT PRIMARY KEY,
+        email VARCHAR(255),
+        refresh_token VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (email) REFERENCES users(email) ON DELETE CASCADE
+      )`,
+    ];
 
-                // Create users_details database if it doesn't exist
-                else {
-                        const user_details_database = 'CREATE DATABASE IF NOT EXISTS users_details';
-                        db_user_details.query(user_details_database, (err) => {
-                                if (err) throw err;
-                                console.log("Database created");
-                        });
-                }
+    for (let i = 0; i < tables.length; i++) {
+      await pool.query(tables[i]);
+    }
 
-                // Use the database
-                db_user_details.query(`USE ${database_name}`, (err) => {
-                        if (err) throw err;
+    console.log("Tables 'users' and 'users_refresh_tokens' created or already exist");
 
-                        // Query to get list of all the tables of the user
-                        db_user_details.query('SHOW TABLES', (err, result) => {
-                                if (err) throw err;
+    return pool;
+  } catch (error) {
+    console.error("Error initializing database:", error.message);
+    throw error;
+  }
+}
 
-                                // Extract the table names from the result
-                                const tables = result.map(row => Object.values(row)[0]);
-
-                                // Check if the user exists
-                                if (tables.includes('users')) {
-                                        console.log("Table already exists");
-                                }
-
-                                // Create user_table if it doesn't exist
-                                else {
-                                        const user_table = 'CREATE TABLE users (email VARCHAR(40) PRIMARY KEY, first_name VARCHAR(20) NOT NULL, last_name VARCHAR(20) NOT NULL, phone_number VARCHAR(10), user_password VARCHAR(255) NOT NULL, refresh_token VARCHAR(200))';
-                                        db_user_details.query(user_table, (err) => {
-                                                if (err) throw err;
-                                                console.log("Table created");
-                                        });
-                                }
-                        });
-                });
-        });
-});
+const db_user_details = initializeDatabase();
 
 export default db_user_details;

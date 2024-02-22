@@ -26,10 +26,15 @@ collection = db['newpets']
 
 model_url = "https://tfhub.dev/tensorflow/efficientnet/lite0/feature-vector/2"
 
+def init_model():
+    global layer, model
+    layer = hub.KerasLayer(model_url, trainable=False)  # Load and freeze weights
+    model = tf.keras.Sequential([layer])
+
+
 IMAGE_SHAPE = (224, 224)
 
-layer = hub.KerasLayer(model_url)
-model = tf.keras.Sequential([layer])
+init_model()  # Load the model at the beginning
 
 class imageSimilarityClass : 
         def imagePreprocessing(self, file):

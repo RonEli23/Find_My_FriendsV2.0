@@ -94,10 +94,7 @@ const ImageForm = () => {
                 }
                 try {
                         setLoading(true);
-                        for (var key of formData.entries()) {
-                                console.log(key[0] + ', ' + key[1])
-                        }
-                        
+
                         const res = await axiosPrivate.post(UPLOAD_IMAGE_URL, formData,{
                                 headers:{"Content-Type": "multipart/form-data"}
                         });

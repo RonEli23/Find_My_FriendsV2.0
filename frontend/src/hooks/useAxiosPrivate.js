@@ -27,12 +27,14 @@ const useAxiosPrivate = () => {
             // else, deal with error response
             async (error) => {
                 const prevRequest = error?.config; // if there was an error, retrieve the previous request by accessing the config property
+                
                 if (error?.response?.status === 403 && !prevRequest?.sent) {
                     // 403 => expired  access token
                     // sent is a custom property, to avoid endless loop
                     prevRequest.sent = true; 
                     const newAccessToken = await refresh();
                     prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    console.log(newAccessToken);
                     return axiosPrivate(prevRequest); // update the request with a new access token
                 }
                 return Promise.reject(error);
