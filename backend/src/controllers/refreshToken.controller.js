@@ -1,4 +1,4 @@
-import db_user_details from "../sql/sqlConnection.js";
+import { mysqlPool } from "../../app.js";
 import jwt from "jsonwebtoken";
 import { generateAccessToken, generateRefreshToken } from "./auth.controller.js";
 
@@ -15,7 +15,7 @@ export const handleRefreshToken = async (req, res) => {
   res.clearCookie("jwt", { httpOnly: true, sameSite: "None", secure: true });
 
   try {
-    const pool = await db_user_details;
+    const pool = mysqlPool;
 
     const [result] = await pool.query(
       "SELECT * FROM users INNER JOIN users_refresh_tokens ON users.email = users_refresh_tokens.email WHERE users_refresh_tokens.refresh_token = ?",

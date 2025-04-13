@@ -1,4 +1,4 @@
-import db_user_details from "../sql/sqlConnection.js";
+import { mysqlPool } from "../../app.js";
 
 /**
  * Handles the logout logic.
@@ -11,7 +11,7 @@ export const handleLogout = async (req, res) => {
   const refreshToken = cookies.jwt;
 
   try {
-    const pool = await db_user_details;
+    const pool = mysqlPool;
 
     const [result] = await pool.query(
       "SELECT * FROM users_refresh_tokens WHERE refresh_token = ?",

@@ -53,8 +53,13 @@ class imageSimilarityClass :
 
         def imageSimilarity(self, petType, docID, status):
                 metric = 'cosine'
-                dir_list = os.listdir("../pets")
-                test_image_address = f"../pets/{dir_list[0]}"
+                pets_dir = "/backend-app/pets" if os.getenv("DOCKER_ENV") == "true" else "pets"
+                dir_list = os.listdir(pets_dir)
+                if not dir_list:
+                        print("No images found in the pets directory.")
+                        return json.dumps({"error": "No images found"})
+
+                test_image_address = os.path.join(pets_dir, dir_list[0])
                 test_image = self.imagePreprocessing(test_image_address)
                 print(status)
                 if(status == "found"):

@@ -1,0 +1,80 @@
+services:
+  node-app:
+    build:
+      context: .
+      dockerfile: DockerFile-node
+    ports:
+      - "8080:8080"
+    depends_on:
+      - flask-app
+      - mysql
+      - mongo
+    env_file:
+      - .env
+    environment:
+      - DOCKER_ENV=true
+    networks:
+      - app-network
+    volumes:
+      - pets-data:/backend-app/pets
+    restart: always
+
+  flask-app:
+    build:
+      context: ./py
+      dockerfile: DockerFile-flask
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env  # Load environment variables
+    environment:
+      - DOCKER_ENV=true
+    networks:
+      - app-network
+    restart: always
+    volumes:
+      - pets-data:/backend-app/pets  # Mount the same volume in Flask
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    restart: always  # Ensure MySQL restarts if it crashes
+    env_file:
+      - .env  # Load MySQL credentials from .env file
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD}  
+      MYSQL_DATABASE: ${DB_MYSQL_NAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql", "-u", "root", "-p${DB_MYSQL_PASSWORD}"]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo-container
+    restart: always
+    env_file:
+      - .env  # Load MongoDB credentials from .env file
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  mongo-data:
+  pets-data:
