@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import db_user_details from "../sql/sqlConnection.js";
+import { mysqlPool } from "../../app.js";
 import { validationResult } from "express-validator";
 
 // SignUp
@@ -13,7 +13,7 @@ export const handleSignUp = async (req, res) => {
         }
 
         try {
-                const pool = await db_user_details;
+                const pool = await mysqlPool;
                 const [existingUsers] = await pool.query('SELECT COUNT(*) AS count FROM users WHERE email = ?', [email]);
 
                 if (existingUsers[0].count > 0) {

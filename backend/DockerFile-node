@@ -1,0 +1,25 @@
+# Base image
+FROM node:18-alpine as BASE_IMAGE
+
+WORKDIR /backend-app
+
+# Copy and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy application source
+COPY . .
+
+# Production image
+FROM node:18-alpine as PRODUCTION_IMAGE
+
+WORKDIR /backend-app
+
+# Copy compiled dependencies and source code from the builder stage
+COPY --from=BASE_IMAGE /backend-app /backend-app
+
+RUN mkdir -p /backend-app/pets && chmod -R 777 /backend-app/pets
+
+EXPOSE 8080
+
+CMD ["npm", "start"]

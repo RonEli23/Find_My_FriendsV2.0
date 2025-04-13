@@ -1,5 +1,5 @@
 import { validationResult } from "express-validator";
-import db_user_details from "../sql/sqlConnection.js";
+import { mysqlPool } from "../../app.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -32,7 +32,7 @@ export const handleSignIn = async (req, res) => {
   }
 
   try {
-    const pool = await db_user_details;
+    const pool = mysqlPool;
 
     const [result] = await pool.query(
       "SELECT * FROM users WHERE email = ?",
@@ -102,7 +102,7 @@ export const handleSignIn = async (req, res) => {
 
 
 async function deleteRefreshToken(refreshToken) {
-  const pool = await db_user_details;
+  const pool = mysqlPool;
   try {
     const deleteResult = await pool.query(
       "DELETE FROM users_refresh_tokens WHERE refresh_token = ?",
@@ -119,7 +119,7 @@ async function deleteRefreshToken(refreshToken) {
 }
 
 async function clearAllRefreshTokens(email) {
-  const pool = await db_user_details;
+  const pool = mysqlPool;
   try {
     await pool.query(
       "DELETE FROM users_refresh_tokens WHERE email = ?",

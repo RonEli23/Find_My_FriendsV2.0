@@ -13,11 +13,15 @@ import publicRequestsRouter from "./src/routes/api/publicRequests.js";
 import requestsRouter from "./src/routes/api/requests.js";
 import usersRouter from "./src/routes/api/users.js";
 import internalDataRouter from "./src/routes/internalData.js";
-import { verifyJWT } from './src/middlewares/verifyJWT.middleware.js'
+import { verifyJWT } from './src/middlewares/verifyJWT.middleware.js';
+import connectMongoDB from './src/config/mongoDBCon.js';
+import { initializeDatabase } from './src/sql/sqlConnection.js';
 
 const port = process.env.PORT || 8080;
-const uri_mongo = process.env.MONGODB_URI_LOCAL;
+const uri_mongo = process.env.DB_MONGO_URI;
 const app = express();
+
+let mysqlPool;
 
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
@@ -40,9 +44,19 @@ app.use('/data', dataRouter);
 
 //app.use('/route', router);
 
-const connection = async () => {
-  const uri = uri_mongo;
-  await mongoose.connect(uri);
-  app.listen(port, () => console.log(`Listen on port ${port}`));
-}
-connection().catch(err => console.log(err.message));
+// First, connect to MongoDB and MySQL before starting the server
+Promise.all([connectMongoDB(), initializeDatabase()])
+  .then(([_, pool]) => {
+    mysqlPool = pool; // Store the MySQL pool
+    console.log("✅ All databases connected successfully!");
+
+    app.listen(port, "0.0.0.0", () =>
+      console.log(`🚀 Server running on port ${port}`)
+    );
+  })
+  .catch((err) => {
+    console.error("❌ Server startup failed:", err);
+    process.exit(1);
+  });
+
+export { mysqlPool };
